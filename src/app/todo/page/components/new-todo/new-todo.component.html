@@ -1,0 +1,17 @@
+@if (todoControl.touched && todoControl.hasError("required")) {
+  <div class="text-rose-600">Required</div>
+}
+<form class="mb-4 flex gap-2" [formGroup]="newTodoForm" (ngSubmit)="newTodo()">
+  <label class="flex flex-col">
+    <input
+      type="text"
+      class="px-4 py-2 border rounded"
+      [ngClass]="{
+        'border-rose-600':
+          todoControl.touched && todoControl.hasError('required')
+      }"
+      [formControlName]="NewTodoFormFields.TODO"
+    />
+  </label>
+  <button type="submit" class="px-4 py-2 border rounded">Add</button>
+</form>
