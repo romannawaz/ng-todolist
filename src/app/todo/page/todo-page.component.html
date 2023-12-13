@@ -1,0 +1,8 @@
+<div class="flex flex-col gap-2">
+  <app-new-todo (onNewTodoSubmit)="newTodo($event)" />
+  @for (todo of Todos; track $index) {
+    <app-todo-item [todo]="todo" (onTodoChanges)="onTodoChanges($event)" />
+  } @empty {
+    <div>Todo list is empty</div>
+  }
+</div>

@@ -1,0 +1,15 @@
+<div class="flex items-center gap-2">
+  <label class="flex gap-2 grow">
+    <input type="checkbox" [formControl]="doneControl" />
+    <p
+      class="px-4 py-2 grow border rounded"
+      [ngClass]="{ 'line-through': todo.done }"
+    >
+      {{ todo.title }}
+    </p>
+  </label>
+  @if (todo.done) {
+    <!-- TODO: Remove item -->
+    <img src="assets/icons/bin.svg" class="cursor-pointer h-6" />
+  }
+</div>
