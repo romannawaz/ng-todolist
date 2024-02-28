@@ -22,7 +22,9 @@
     "lib": ["ES2022", "dom"],
     "paths": {
       "@app/todo/common": ["./src/app/todo/common/index.ts"],
-      "@app/todo/page": ["./src/app/todo/page/index.ts"]
+      "@app/todo/page": ["./src/app/todo/page/index.ts"],
+      "@app/search/page": ["./src/app/search/page/index.ts"],
+      "@app/search/service": ["./src/app/search/services/index.ts"]
     }
   },
   "angularCompilerOptions": {

@@ -1,0 +1,48 @@
+<div class="flex flex-col gap-2">
+  @if (isServiceLoadingSig()) {
+    <p class="px-4 py-2 bg-red-500 text-white grow border rounded">
+      Loading...
+    </p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <app-search-bar
+              class="block mr-2"
+              (onSearch)="onSearch($event, UserFields.NAME)"
+            />
+          </th>
+          <th>
+            <app-search-bar
+              class="block ml-2"
+              (onSearch)="onSearch($event, UserFields.AGE)"
+            />
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <span class="block my-2">Name</span>
+          </th>
+          <th>
+            <span class="block my-2">Age</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of filteredUsersSig(); track user.id) {
+          <app-list-item [user]="user" />
+        } @empty {
+          <tr>
+            <td
+              colspan="100%"
+              class="px-4 py-2 bg-red-500 text-white grow border rounded"
+            >
+              {{ !isSearchEmpty() ? "Not found" : "No data" }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
