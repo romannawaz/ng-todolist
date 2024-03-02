@@ -9,28 +9,35 @@
         <tr>
           <th>
             <app-search-bar
-              class="block mr-2"
+              class="block mr-2 mb-2"
               (onSearch)="onSearch($event, UserFields.NAME)"
             />
           </th>
           <th>
             <app-search-bar
-              class="block ml-2"
+              class="block ml-2 mb-2"
               (onSearch)="onSearch($event, UserFields.AGE)"
             />
           </th>
         </tr>
         <tr>
-          <th>
-            <span class="block my-2">Name</span>
+          <th
+            class="py-1 bg-slate-300 border"
+            (click)="onSort(UserFields.NAME)"
+          >
+            <app-thead [sortDirection]="sortSig()[UserFields.NAME]">
+              Name
+            </app-thead>
           </th>
-          <th>
-            <span class="block my-2">Age</span>
+          <th class="py-1 bg-slate-300 border" (click)="onSort(UserFields.AGE)">
+            <app-thead [sortDirection]="sortSig()[UserFields.AGE]">
+              Age
+            </app-thead>
           </th>
         </tr>
       </thead>
       <tbody>
-        @for (user of filteredUsersSig(); track user.id) {
+        @for (user of modifiedUsersSig(); track user.id) {
           <app-list-item [user]="user" />
         } @empty {
           <tr>
