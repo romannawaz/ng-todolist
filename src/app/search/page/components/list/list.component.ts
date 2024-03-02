@@ -10,11 +10,18 @@ import { CommonModule } from '@angular/common';
 import { SearchService, User, UserFields } from '@app/search/service';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { TheadComponent } from './components/thead/thead.component';
 
+type UserWithoutId = Omit<User, 'id'>;
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, ListItemComponent, SearchBarComponent],
+  imports: [
+    CommonModule,
+    ListItemComponent,
+    SearchBarComponent,
+    TheadComponent,
+  ],
   providers: [SearchService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
@@ -27,11 +34,12 @@ export class ListComponent {
   isServiceLoadingSig = this.searchService.isLoadingSig;
 
   private usersSig = this.searchService.usersSig;
-  private searchSig = signal<Partial<Omit<User, 'id'>>>({});
-  filteredUsersSig = computed(() => this.filterUsersOnSearch());
+  private searchSig = signal<Partial<UserWithoutId>>({});
+  sortSig = signal<Partial<{ [key in keyof UserWithoutId]: boolean }>>({});
+  modifiedUsersSig = computed(() => this.sortUsers(this.getFilteredUsers()));
 
-  private filterUsersOnSearch() {
-    let res = this.usersSig();
+  private getFilteredUsers(): User[] {
+    let res: User[] = this.usersSig();
     const { name, age } = this.searchSig();
 
     if (name) {
@@ -46,8 +54,34 @@ export class ListComponent {
     return res;
   }
 
-  onSearch(searchValue: string, field: UserFields) {
+  private sortUsers(users: User[]): User[] {
+    if (this.sortSig()[UserFields.NAME] !== undefined) {
+      users.sort((a, b) =>
+        a[UserFields.NAME].localeCompare(b[UserFields.NAME]),
+      );
+
+      if (!this.sortSig()[UserFields.NAME]) {
+        users.reverse();
+      }
+    }
+
+    if (this.sortSig()[UserFields.AGE] !== undefined) {
+      users.sort((a, b) => a[UserFields.AGE] - b[UserFields.AGE]);
+
+      if (!this.sortSig()[UserFields.AGE]) {
+        users.reverse();
+      }
+    }
+
+    return users;
+  }
+
+  onSearch(searchValue: string, field: UserFields): void {
     this.searchSig.set({ ...this.searchSig(), [field]: searchValue });
+  }
+
+  onSort(field: UserFields): void {
+    this.sortSig.set({ [field]: !this.sortSig()[field] });
   }
 
   isSearchEmpty(): boolean {
